@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feed index{% endblock %}
+
+{% block body %}
+    <h1>Feed index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Url</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for feed in feeds %}
+            <tr>
+                <td>{{ feed.id }}</td>
+                <td>{{ feed.url }}</td>
+                <td>{{ feed.createdAt ? feed.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ feed.updatedAt ? feed.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('feed_edit', {'id': feed.id}) }}">edit</a>
+                    <form method="post" action="{{ path('feed_delete', {'id': feed.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ feed.id) }}">
+                        <button class="btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('feed_new') }}">Create new</a>
+{% endblock %}
