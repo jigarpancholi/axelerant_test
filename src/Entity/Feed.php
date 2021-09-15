@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\FeedRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=FeedRepository::class)
@@ -22,6 +23,7 @@ class Feed
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Url()
      */
     private $url;
 

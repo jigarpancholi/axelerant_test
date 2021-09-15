@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/feed")
- */
 class FeedController extends AbstractController
 {
     /**
@@ -23,12 +20,12 @@ class FeedController extends AbstractController
     public function index(FeedRepository $feedRepository): Response
     {
         return $this->render('feed/index.html.twig', [
-            'feeds' => $feedRepository->findAll(),
+            'feeds' => $feedRepository->findBy([], ['id' => 'desc']),
         ]);
     }
 
     /**
-     * @Route("/new", name="feed_new", methods={"GET","POST"})
+     * @Route("/feed/new", name="feed_new", methods={"GET","POST"})
      * @IsGranted("ROLE_USER")
      */
     public function new(Request $request): Response
@@ -42,6 +39,8 @@ class FeedController extends AbstractController
             $entityManager->persist($feed);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Feed url is created.');
+
             return $this->redirectToRoute('feed_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -52,7 +51,7 @@ class FeedController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="feed_edit", methods={"GET","POST"})
+     * @Route("/feed/{id}/edit", name="feed_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function edit(Request $request, Feed $feed): Response
@@ -62,6 +61,8 @@ class FeedController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Feed url is updated.');
 
             return $this->redirectToRoute('feed_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -73,7 +74,7 @@ class FeedController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="feed_delete", methods={"POST"})
+     * @Route("/feed/{id}", name="feed_delete", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, Feed $feed): Response
@@ -83,6 +84,8 @@ class FeedController extends AbstractController
             $entityManager->remove($feed);
             $entityManager->flush();
         }
+
+        $this->addFlash('success', 'Feed url is deleted.');
 
         return $this->redirectToRoute('feed_index', [], Response::HTTP_SEE_OTHER);
     }
