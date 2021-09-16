@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feed Content{% endblock %}
+
+{% block body %}
+<div class="feed-content">
+    {% include 'flash_messages.html.twig' %}
+    <h4>Feed Content</h4>
+
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                {% for content in feed.contents %}
+                    <div class="col">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <p class="card-text">{{ content.title }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <a href="{{ content.link }}" type="button" class="btn btn-sm btn-outline-secondary" target="_blank">View</a>
+                                        <a href="{{ path('content_edit', {'id': content.id}) }}" type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    </div>
+                                    <small class="text-muted">{{ content.pubDate|date('F jS \\a\\t g:ia') }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <h5>No content found.</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

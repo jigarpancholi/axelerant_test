@@ -26,5 +26,7 @@ class FeedFixtures extends Fixture
         $manager->persist($feed3);
 
         $manager->flush();
+
+        $this->addReference('feed1', $feed1);
     }
 }

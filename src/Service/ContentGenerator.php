@@ -37,7 +37,7 @@ class ContentGenerator
     private function saveFeedContent(Feed $feed, array $feedContents): void
     {
         foreach ($feedContents['channel']['item'] as $feedContent) {
-            $pubDate = strtotime($feedContent['pubDate']);
+            $pubDate = \DateTime::createFromFormat(\DateTime::RSS, $feedContent['pubDate']) ?: new \DateTime();
 
             $content = new Content();
             $content
@@ -45,7 +45,7 @@ class ContentGenerator
                 ->setTitle($feedContent['title'])
                 ->setLink($feedContent['link'])
                 ->setDescription(is_string($feedContent['description']) ? $feedContent['description'] : '')
-                ->setPubDate(new \DateTime($pubDate));
+                ->setPubDate($pubDate);
 
             $this->entityManager->persist($content);
         }
