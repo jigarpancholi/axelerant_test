@@ -15,3 +15,5 @@ Steps to setup project:
   Role user: user@example.com / admin@123
   
   Role admin: admin@example.com / admin@123
+
+- Run php unit test cases using this command `composer test-cases`. This command loads fixtures data and run unit test cases.
